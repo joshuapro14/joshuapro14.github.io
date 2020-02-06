@@ -28,7 +28,9 @@
       });
 
       function promptAndSubscribeUser() {
+        console.log('promptAndSubscribeUser called');
         window.OneSignal.isPushNotificationsEnabled(function(isEnabled) {
+          console.log({isEnabled});
           if (!isEnabled) {
             window.OneSignal.showSlidedownPrompt();
           }
