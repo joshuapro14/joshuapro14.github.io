@@ -9,7 +9,7 @@
   </head>
   <body>
     <h1>One Signal Notification Test Page</h1>
-    <h5>1.0.4</h5>
+
     <!--<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
     <script>
       let OneSignal = window.OneSignal || [];
@@ -112,7 +112,7 @@
         /* Get current time */
         var timeNow = Date.now();
         /* Prompt the user if enough time has elapsed */
-        setTimeout(promptAndSubscribeUser, Math.max(notificationPromptDelay - (timeNow - navigationStart), 0));
+        //setTimeout(promptAndSubscribeUser, Math.max(notificationPromptDelay - (timeNow - navigationStart), 0));
       });
 
       function promptAndSubscribeUser() {
@@ -129,5 +129,7 @@
 
     </script>
     <div class='onesignal-customlink-container'></div>
+    <button onclick="promptAndSubscribeUser()" id="showButton">Read more</button>
+    <h5>1.0.5</h5>
   </body>
 </html>
