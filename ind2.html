@@ -29,7 +29,7 @@
 
       let showNotification = async() => {
         if(OneSignal != null && !notificationFlag){
-          await waitFor(1500);
+          //await waitFor(1500);
           OneSignal.push(function() {
             OneSignal.showNativePrompt();
           });
