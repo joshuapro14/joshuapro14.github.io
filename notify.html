@@ -9,7 +9,7 @@
   </head>
   <body>
     <h1>One Signal Notification Test Page</h1>
-    <h5>1.0.3</h5>
+    <h5>1.0.4</h5>
     <!--<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
     <script>
       let OneSignal = window.OneSignal || [];
@@ -120,7 +120,9 @@
         window.OneSignal.isPushNotificationsEnabled(function(isEnabled) {
           console.log({isEnabled});
           if (!isEnabled) {
-            window.OneSignal.showSlidedownPrompt();
+            //window.OneSignal.showSlidedownPrompt();
+            window.OneSignal.showNativePrompt();
+            console.log('showNativePrompt called');
           }
         });
       }
