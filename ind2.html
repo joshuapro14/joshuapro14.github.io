@@ -28,12 +28,13 @@
       let notificationFlag = false;
 
       let showNotification = async() => {
-        if(OneSignal != null && !notificationFlag){
+        if(window.OneSignal != null){
           //await waitFor(1500);
-          OneSignal.push(function() {
-            OneSignal.showNativePrompt();
+          window.OneSignal.isPushNotificationsEnabled(function(isEnabled) {
+            if (!isEnabled) {
+              window.OneSignal.showSlidedownPrompt();
+            }
           });
-          notificationFlag = true;
         }
       }
 
