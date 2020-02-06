@@ -9,8 +9,8 @@
   </head>
   <body>
     <h1>One Signal Notification Test Page</h1>
-    <h5>1.0.1</h5>
-    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <h5>1.0.2</h5>
+    <!--<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
     <script>
       let OneSignal = window.OneSignal || [];
       console.log({OneSignal});
@@ -86,6 +86,17 @@
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scel<span id="dots">...</span>
       <span id="more">erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.</span>
     </p>
-    <button onclick="showMoreOrLess()" id="showButton">Read more</button>
+    <button onclick="showMoreOrLess()" id="showButton">Read more</button>-->
+
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <script>
+      var OneSignal = window.OneSignal || [];
+      OneSignal.push(function() {
+        OneSignal.init({
+          appId: "c0cfb56b-a6a0-4582-ad88-641a9d1b1f21",
+        });
+      });
+    </script>
+    <div class='onesignal-customlink-container'></div>
   </body>
 </html>
