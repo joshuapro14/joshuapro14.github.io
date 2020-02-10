@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>TruePush Notify 2 </title>
+
+  </head>
+  <body>
+    <h1>Truepush Notification Test Page</h1>
+
+    <script type="application/javascript" src="https://sdki.truepush.com/sdk/v2.0.2/app.js" async></script>
+    <script>
+    var truepush = window.truepush || [];
+    truepush.push(function(){
+        truepush.Init({
+            id: "5e3aaea75d0840bedde37b60"
+            }, function(error){
+              if(error) console.error(error);
+            })
+        })
+    </script>
+
+    <h5>1.0.0</h5>
+  </body>
+</html>
