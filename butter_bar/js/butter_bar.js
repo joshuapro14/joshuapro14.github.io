@@ -65,7 +65,6 @@ const butterBarStyle = `
 let getStyleElement = () => {
   let style = document.createElement('style');
   style.type = 'text/css';
-  //style.innerHTML = '.cssClass { color: #F00; }';
   style.innerHTML =butterBarStyle;
   return style;
 }
@@ -85,6 +84,7 @@ let getPushButton = () => {
 
 let getButterBarElement = () => {
   let elem = document.createElement('div');
+  elem.setAttribute('id','butterBar');
   elem.setAttribute('class','butterBar');
   let button = getPushButton();
   elem.append(button);
@@ -97,6 +97,8 @@ let injectButterBar = (bbElem) => {
 }
 
 let injectButterBarIfNotEnabled = () => {
+
+
   window.OneSignal.isPushNotificationsEnabled(function(isEnabled) {
     console.log({isEnabled});
     if (!isEnabled) {
@@ -107,6 +109,13 @@ let injectButterBarIfNotEnabled = () => {
   })
 }
 
+let removeButterBarIfExist = () => {
+  let bbElem = document.getElementById('butterBar');
+  if(bbElem != null && bbElem.parentNode != null){
+    bbElem.parentNode.removeChild(bbElem);
+  }
+}
+
 let init = async() => {
   await waitTillOneSignalIsAvailable();
   console.log("Init start")
@@ -115,13 +124,9 @@ let init = async() => {
   }
 }
 
-//let event = new Event("oneSignalInitialized");
-//let elemToListen = document.createElement('div');
-
 let timer;
 let waitTillOneSignalIsAvailable = () => {
   return new Promise(resolve => {
-    //elemToListen.addEventListener('oneSignalInitialized',()=> {resolve()});
     timer = setInterval(()=>{
       if(window.OneSignal != null){
         clearInterval(timer);
@@ -133,6 +138,19 @@ let waitTillOneSignalIsAvailable = () => {
   })
 }
 
+let repaintButterBarAsPerPermission = () => {
+  let permission;
+  let t = setInterval(()=>{
+    permission = Notification.permission;
+    if(permission != 'default'){
+      clearInterval(t);
+      removeButterBarIfExist();
+    }else{
+      console.log("timer ran for permission set!!!");
+    }
+  }, 500);
+}
+
 function promptAndSubscribeUser() {
   console.log('promptAndSubscribeUser called');
   window.OneSignal.isPushNotificationsEnabled(function(isEnabled) {
@@ -140,19 +158,13 @@ function promptAndSubscribeUser() {
     if (!isEnabled) {
       //window.OneSignal.showSlidedownPrompt();
       window.OneSignal.showNativePrompt();
+
       console.log('showNativePrompt called');
+      repaintButterBarAsPerPermission();
+
     }
   });
 }
 
-/*let init2 = () => {
-  window.OneSignal = {enabled: false};
-  elemToListen.dispatchEvent(event);
-}
-
-let init3 = () => {
-  window.OneSignal = {enabled: true};
-  elemToListen.dispatchEvent(event);
-}*/
 
 init();
