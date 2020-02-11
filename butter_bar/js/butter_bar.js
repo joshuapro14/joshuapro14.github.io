@@ -101,7 +101,7 @@ let injectButterBarIfNotEnabled = () => {
 
   window.OneSignal.isPushNotificationsEnabled(function(isEnabled) {
     console.log({isEnabled});
-    if (!isEnabled) {
+    if (!isEnabled && Notification.permission != 'default') {
       injectStyle();
       let elem = getButterBarElement();
       injectButterBar(elem);
@@ -111,6 +111,10 @@ let injectButterBarIfNotEnabled = () => {
 
 let removeButterBarIfExist = () => {
   let bbElem = document.getElementById('butterBar');
+  console.log({bbElem,'log':'removeButterBarIfExist'});
+  if(bbElem != null){
+    console.log({'bbElem-parent':bbElem.parentNode});
+  }
   if(bbElem != null && bbElem.parentNode != null){
     bbElem.parentNode.removeChild(bbElem);
   }
@@ -139,9 +143,11 @@ let waitTillOneSignalIsAvailable = () => {
 }
 
 let repaintButterBarAsPerPermission = () => {
-  let permission;
+  let permission= Notification.permission;
+  console.log({permission,'log':'repaintButterBarAsPerPermission started'})
   let t = setInterval(()=>{
     permission = Notification.permission;
+    console.log({permission});
     if(permission != 'default'){
       clearInterval(t);
       removeButterBarIfExist();
@@ -155,12 +161,13 @@ function promptAndSubscribeUser() {
   console.log('promptAndSubscribeUser called');
   window.OneSignal.isPushNotificationsEnabled(function(isEnabled) {
     console.log({isEnabled});
-    if (!isEnabled) {
+    if (!isEnabled ) {
       //window.OneSignal.showSlidedownPrompt();
+      repaintButterBarAsPerPermission();
       window.OneSignal.showNativePrompt();
 
       console.log('showNativePrompt called');
-      repaintButterBarAsPerPermission();
+
 
     }
   });
