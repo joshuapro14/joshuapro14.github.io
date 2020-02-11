@@ -8,11 +8,20 @@
   <body>
     <h1>User Engagement through butter bar</h1>
     <hr/>
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <script>
+      let OneSignal = window.OneSignal || [];
+      OneSignal.push(function() {
+        OneSignal.init({
+          appId: "c0cfb56b-a6a0-4582-ad88-641a9d1b1f21",
+        });
+      });
+    </script>
     <script type="text/javascript" src="js/butter_bar.js"></script>
     <!--<script type="text/javascript" src="sw.js"></script>-->
-    <button onclick="init2()">Start with OneSignal Disabled</button>
-    <button onclick="init3()">Start with OneSignal Enabled</button>
-    <h5>1.0.0</h5>
+    <!--<button onclick="init2()">Start with OneSignal Disabled</button>
+    <button onclick="init3()">Start with OneSignal Enabled</button>-->
+    <h5>1.0.1</h5>
 
   </body>
 </html>

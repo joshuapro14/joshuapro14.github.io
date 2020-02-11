@@ -78,6 +78,7 @@ let injectStyle = () => {
 let getPushButton = () => {
   let elem = document.createElement('div');
   elem.setAttribute('class','butterBarButton');
+  elem.setAttribute('onclick','promptAndSubscribeUser()');
   elem.innerText = "Get Updates";
   return elem;
 }
@@ -95,27 +96,56 @@ let injectButterBar = (bbElem) => {
   body.prepend(bbElem);
 }
 
-let init = async() => {
-  await waitTillOneSignalIsAvailable();
-  console.log("Init start")
-  if(window.OneSignal && window.OneSignal.enabled == false){
-    injectStyle();
-    let elem = getButterBarElement();
-    injectButterBar(elem);
-  }
-}
-
-let event = new Event("oneSignalInitialized");
-let elemToListen = document.createElement('div');
-
-
-let waitTillOneSignalIsAvailable = () => {
-  return new Promise(resolve => {
-    elemToListen.addEventListener('oneSignalInitialized',()=> {resolve()});
+let injectButterBarIfNotEnabled = () => {
+  window.OneSignal.isPushNotificationsEnabled(function(isEnabled) {
+    console.log({isEnabled});
+    if (!isEnabled) {
+      injectStyle();
+      let elem = getButterBarElement();
+      injectButterBar(elem);
+    }
   })
 }
 
-let init2 = () => {
+let init = async() => {
+  await waitTillOneSignalIsAvailable();
+  console.log("Init start")
+  if(window.OneSignal){
+    injectButterBarIfNotEnabled();
+  }
+}
+
+//let event = new Event("oneSignalInitialized");
+//let elemToListen = document.createElement('div');
+
+let timer;
+let waitTillOneSignalIsAvailable = () => {
+  return new Promise(resolve => {
+    //elemToListen.addEventListener('oneSignalInitialized',()=> {resolve()});
+    timer = setInterval(()=>{
+      if(window.OneSignal != null){
+        clearInterval(timer);
+        resolve();
+      }else{
+        console.log("timer ran!!!");
+      }
+    }, 500);
+  })
+}
+
+function promptAndSubscribeUser() {
+  console.log('promptAndSubscribeUser called');
+  window.OneSignal.isPushNotificationsEnabled(function(isEnabled) {
+    console.log({isEnabled});
+    if (!isEnabled) {
+      //window.OneSignal.showSlidedownPrompt();
+      window.OneSignal.showNativePrompt();
+      console.log('showNativePrompt called');
+    }
+  });
+}
+
+/*let init2 = () => {
   window.OneSignal = {enabled: false};
   elemToListen.dispatchEvent(event);
 }
@@ -123,6 +153,6 @@ let init2 = () => {
 let init3 = () => {
   window.OneSignal = {enabled: true};
   elemToListen.dispatchEvent(event);
-}
+}*/
 
 init();
