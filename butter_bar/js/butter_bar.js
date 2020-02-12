@@ -167,7 +167,7 @@ let waitFor = (timeinMs) => {
   })
 }
 
-let showNativeNotification = () => {
+let showNativeNotification = async() => {
   await waitFor(5000);
   window.OneSignal.showNativePrompt();
   console.log('showNativePrompt called');
