@@ -68,10 +68,14 @@ let getStyleElement = () => {
   style.innerHTML =butterBarStyle;
   return style;
 }
+let styleInjectedFlag = false;
 
 let injectStyle = () => {
-  let style = getStyleElement();
-  document.getElementsByTagName('head')[0].appendChild(style);
+  if(!styleInjectedFlag){
+    let style = getStyleElement();
+    document.getElementsByTagName('head')[0].appendChild(style);
+    styleInjectedFlag = true;
+  }  
 }
 
 let getPushButton = () => {
@@ -101,7 +105,7 @@ let injectButterBarIfNotEnabled = () => {
 
   window.OneSignal.isPushNotificationsEnabled(function(isEnabled) {
     console.log({isEnabled});
-    if (!isEnabled && Notification.permission != 'default') {
+    if (!isEnabled && Notification.permission === 'default') {
       injectStyle();
       let elem = getButterBarElement();
       injectButterBar(elem);
