@@ -75,7 +75,7 @@ let injectStyle = () => {
     let style = getStyleElement();
     document.getElementsByTagName('head')[0].appendChild(style);
     styleInjectedFlag = true;
-  }  
+  }
 }
 
 let getPushButton = () => {
@@ -161,18 +161,27 @@ let repaintButterBarAsPerPermission = () => {
   }, 500);
 }
 
+let waitFor = (timeinMs) => {
+  return new Promise(resolve => {
+    setTimeout(()=> resolve(), timeinMs);
+  })
+}
+
+let showNativeNotification = () => {
+  await waitFor(5000);
+  window.OneSignal.showNativePrompt();
+  console.log('showNativePrompt called');
+  //repaintButterBarAsPerPermission();
+  removeButterBarIfExist();
+}
+
 function promptAndSubscribeUser() {
   console.log('promptAndSubscribeUser called');
   window.OneSignal.isPushNotificationsEnabled(function(isEnabled) {
     console.log({isEnabled});
     if (!isEnabled ) {
       //window.OneSignal.showSlidedownPrompt();
-      repaintButterBarAsPerPermission();
-      window.OneSignal.showNativePrompt();
-
-      console.log('showNativePrompt called');
-
-
+      showNativeNotification();
     }
   });
 }
