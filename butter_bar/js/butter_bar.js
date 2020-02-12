@@ -59,6 +59,12 @@ const butterBarStyle = `
     background-color: darkblue;
   }
 
+  .pageLink {
+    display : inline-block;
+    padding: 0.2em;
+    cursor: pointer;
+    margin: 0.5em;
+  }
 
 `;
 
