@@ -149,6 +149,12 @@ let waitTillOneSignalIsAvailable = () => {
 let repaintButterBarAsPerPermission = () => {
   let permission= Notification.permission;
   console.log({permission,'log':'repaintButterBarAsPerPermission started'})
+
+  window.OneSignal.on('notificationPermissionChange', function(permissionChange) {
+    var currentPermission = permissionChange.to;
+    console.log('New permission state:', {currentPermission,permissionChange});
+  });
+
   let t = setInterval(()=>{
     permission = Notification.permission;
     console.log({permission});
@@ -167,8 +173,8 @@ let waitFor = (timeinMs) => {
   })
 }
 
-let showNativeNotification = async() => {
-  await waitFor(5000);
+let showNativeNotification = () => {
+  //await waitFor(0);
   window.OneSignal.showNativePrompt();
   console.log('showNativePrompt called');
   //repaintButterBarAsPerPermission();
