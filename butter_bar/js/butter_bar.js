@@ -7,7 +7,7 @@ const butterBarStyle = `
     animation: changebar 2.25s infinite;
     text-align:center;
     padding: 0.5em;
-
+    position: fixed;
   }
 
   @-webkit-keyframes changebar {
@@ -49,21 +49,28 @@ const butterBarStyle = `
   .butterBarButton {
     padding: 0.3em;
     color: white;
-    background-color: slateblue;
+    background-color: darkblue;
     cursor: pointer;
     display:inline-block;
+    border-radius: 0.3em;
   }
 
   .butterBarButton:hover {
-    border-radius: 0.3em;
-    background-color: darkblue;
+    background-color: slateblue;
   }
 
   .pageLink {
     display : inline-block;
     padding: 0.2em;
     cursor: pointer;
-    margin: 0.5em;
+    margin: 0.2em;
+    border: 0.3em solid black;
+    border-radius: 0.3em;
+  }
+
+  .pageLink:hover {
+    background-color: darkblue;
+    color:white;
   }
 
 `;
@@ -88,7 +95,7 @@ let getPushButton = () => {
   let elem = document.createElement('div');
   elem.setAttribute('class','butterBarButton');
   elem.setAttribute('onclick','promptAndSubscribeUser()');
-  elem.innerText = "Get Updates";
+  elem.innerText = "OK";
   return elem;
 }
 
@@ -96,6 +103,7 @@ let getButterBarElement = () => {
   let elem = document.createElement('div');
   elem.setAttribute('id','butterBar');
   elem.setAttribute('class','butterBar');
+  elem.innerText = "Please click [Allow] to be notified with updates";
   let button = getPushButton();
   elem.append(button);
   return elem;
@@ -134,24 +142,46 @@ let init = async() => {
   await waitTillOneSignalIsAvailable();
   console.log("Init start")
   if(window.OneSignal){
+    addListenerForSubscriptionChange();
+
     injectButterBarIfNotEnabled();
   }
 }
 
+let addListenerForSubscriptionChange = () => {
+  if(window.OneSignal != null){
+    window.OneSignal.on('subscriptionChange', function (isSubscribed) {
+     console.log("The user's subscription state is now:", isSubscribed);
+   });
+
+   window.OneSignal.on('notificationPermissionChange', function(permissionChange) {
+     var currentPermission = permissionChange.to;
+     console.log('New permission state:', {currentPermission,permissionChange});
+   });
+  }
+}
+
 let timer;
+const maxWaitForOneSignal = 8000;
+const waitIntervalForOneSignal = 500;
 let waitTillOneSignalIsAvailable = () => {
   return new Promise(resolve => {
+    let waited = 0;
     timer = setInterval(()=>{
       if(window.OneSignal != null){
         clearInterval(timer);
         resolve();
-      }else{
-        console.log("timer ran!!!");
       }
-    }, 500);
+      if(waited >= maxWaitForOneSignal){
+        clearInterval(timer);
+        resolve();
+      }
+      waited += waitIntervalForOneSignal;
+    }, waitIntervalForOneSignal);
   })
 }
 
+//Need to change: repaint on subscription change, remove setInterval
 let repaintButterBarAsPerPermission = () => {
   let permission= Notification.permission;
   console.log({permission,'log':'repaintButterBarAsPerPermission started'})
